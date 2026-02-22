@@ -1,6 +1,7 @@
 package com.example.order_service.controller;
 
 import com.example.order_service.client.UserClient;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,12 +29,32 @@ public class OrderController {
         this.userClient = userClient;
     }
 
+    /*@GetMapping("/{id}")
+    public ResponseEntity<String> getOrder(@PathVariable String id) {
+        String user = userClient.getUser(id);
+        System.out.println("user-------> " + user);
+        return ResponseEntity.ok("Order for " + user);
+    }*/
+
+
     @GetMapping("/{id}")
     public ResponseEntity<String> getOrder(@PathVariable String id) {
         String user = userClient.getUser(id);
         System.out.println("user-------> " + user);
         return ResponseEntity.ok("Order for " + user);
     }
+
+    /*@CircuitBreaker(name = "userService", fallbackMethod = "userFallback")
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getOrder(@PathVariable String id) {
+        String user = userClient.getUser(id);
+        return ResponseEntity.ok("Order for " + user);
+    }
+
+    public ResponseEntity<String> userFallback(String id, Throwable t) {
+        return ResponseEntity.ok("Order for [User temporarily unavailable]");
+    }*/
+
 
 
 }
